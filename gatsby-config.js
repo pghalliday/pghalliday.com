@@ -1,11 +1,14 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
-    author: `Kyle Mathews`,
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
+    title: `pghalliday.com`,
+    author: `Peter Halliday`,
+    location: `Amsterdam`,
+    description: `TODO: create a description`,
+    siteUrl: `https://pghalliday.com/`,
     social: {
-      twitter: `kylemathews`,
+      twitter: `pghalliday`,
+      github: `pghalliday`,
+      linkedin: `pehalliday`,
     },
   },
   plugins: [
@@ -74,5 +77,6 @@ module.exports = {
         pathToConfigModule: `src/utils/typography`,
       },
     },
+    `gatsby-plugin-emotion`,
   ],
 }

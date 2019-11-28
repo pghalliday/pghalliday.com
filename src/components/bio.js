@@ -8,13 +8,30 @@
 import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import Image from "gatsby-image"
+import { css } from "@emotion/core"
 
 import { rhythm } from "../utils/typography"
+import {
+  FaTwitter,
+  FaGithub,
+  FaLinkedin,
+} from "react-icons/fa"
+
+const SocialLink = ({ Icon, href }) => (
+  <a 
+    href={href}
+    css={css`
+      box-shadow: none;
+    `}
+  >
+    <Icon />
+  </a>
+)
 
 const Bio = () => {
   const data = useStaticQuery(graphql`
     query BioQuery {
-      avatar: file(absolutePath: { regex: "/profile-pic.jpg/" }) {
+      avatar: file(absolutePath: { regex: "/profile-pic.jpeg/" }) {
         childImageSharp {
           fixed(width: 50, height: 50) {
             ...GatsbyImageSharpFixed
@@ -24,15 +41,18 @@ const Bio = () => {
       site {
         siteMetadata {
           author
+          location
           social {
             twitter
+            github
+            linkedin
           }
         }
       }
     }
   `)
 
-  const { author, social } = data.site.siteMetadata
+  const { author, location, social } = data.site.siteMetadata
   return (
     <div
       style={{
@@ -54,12 +74,13 @@ const Bio = () => {
         }}
       />
       <p>
-        Written by <strong>{author}</strong> who lives and works in San
-        Francisco building useful things.
+        Written by <strong>{author}</strong> who lives and works in {location} building useful things.
+        <br />
+        <SocialLink Icon={FaTwitter} href={`https://twitter.com/${social.twitter}`} />
         {` `}
-        <a href={`https://twitter.com/${social.twitter}`}>
-          You should follow him on Twitter
-        </a>
+        <SocialLink Icon={FaGithub} href={`https://github.com/${social.github}`} />
+        {` `}
+        <SocialLink Icon={FaLinkedin} href={`https://linkedin.com/in/${social.linkedin}`} />
       </p>
     </div>
   )
