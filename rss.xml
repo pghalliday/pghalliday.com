@@ -1,143 +1,477 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[pghalliday.com]]></title><description><![CDATA[TODO: create a description]]></description><link>https://pghalliday.com</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 30 Nov 2019 09:55:10 GMT</lastBuildDate><item><title><![CDATA[New Beginnings]]></title><description><![CDATA[Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts. Separated they live in…]]></description><link>https://pghalliday.com/new-beginnings/</link><guid isPermaLink="false">https://pghalliday.com/new-beginnings/</guid><pubDate>Thu, 28 May 2015 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-right at the coast of the Semantics, a large language ocean. A small river named
-Duden flows by their place and supplies it with the necessary regelialia.&lt;/p&gt;
-&lt;h2&gt;On deer horse aboard tritely yikes and much&lt;/h2&gt;
-&lt;p&gt;The Big Oxmox advised her not to do so, because there were thousands of bad
-Commas, wild Question Marks and devious Semikoli, but the Little Blind Text
-didn’t listen. She packed her seven versalia, put her initial into the belt and
-made herself on the way.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[pghalliday.com]]></title><description><![CDATA[TODO: create a description]]></description><link>https://pghalliday.com</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 30 Nov 2019 11:35:32 GMT</lastBuildDate><item><title><![CDATA[Unattended Install of VirtualBox Extension Pack]]></title><description><![CDATA[Another note I’m really leaving for myself. I’ve migrated my  project to use , both installing and configuring my commonly used applications…]]></description><link>https://pghalliday.com/unattended-install-of-virtualbox-extension-pack/</link><guid isPermaLink="false">https://pghalliday.com/unattended-install-of-virtualbox-extension-pack/</guid><pubDate>Sat, 21 Mar 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Another note I’m really leaving for myself. I’ve migrated my &lt;code class=&quot;language-text&quot;&gt;dotfiles&lt;/code&gt; project to use &lt;code class=&quot;language-text&quot;&gt;Chef&lt;/code&gt;, both installing and configuring my commonly used applications. One which is annoying is &lt;code class=&quot;language-text&quot;&gt;VirtualBox&lt;/code&gt;. 2 problems really. The first is that the VirtualBox Ubuntu repository can be super slow. For now I’m living with that.&lt;/p&gt;
+&lt;p&gt;The second is that I need to install the extension pack for good USB support. This is tricky because the download is version specific and in my chef recipe I always install the latest version. Also I had to dig around a bit to discover how to install without a GUI.&lt;/p&gt;
+&lt;p&gt;Anyway, problem solved and I figured I’d share this handy script that&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;This however showed weasel&lt;/li&gt;
+&lt;li&gt;checks the installed version&lt;/li&gt;
+&lt;li&gt;downloads the correct extension pack to the current directory&lt;/li&gt;
+&lt;li&gt;verifies the shasum&lt;/li&gt;
+&lt;li&gt;installs it&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;token builtin class-name&quot;&gt;set&lt;/span&gt; -e
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;VBoxManage --version&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;&lt;span class=&quot;token environment constant&quot;&gt;IFS&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;r&apos;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;read&lt;/span&gt; -a versions &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;${version}&lt;/span&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;shasums_url&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;https://www.virtualbox.org/download/hashes/&lt;span class=&quot;token variable&quot;&gt;${versions&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;}&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;extpack&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;Oracle_VM_VirtualBox_Extension_Pack-&lt;span class=&quot;token variable&quot;&gt;${versions&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;}&lt;/span&gt;-&lt;span class=&quot;token variable&quot;&gt;${versions&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;}&lt;/span&gt;.vbox-extpack
+&lt;span class=&quot;token assign-left variable&quot;&gt;extpack_url&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;http://download.virtualbox.org/virtualbox/&lt;span class=&quot;token variable&quot;&gt;${versions&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;}&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; -O &lt;span class=&quot;token variable&quot;&gt;${extpack}&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;${extpack_url}&lt;/span&gt;/&lt;span class=&quot;token variable&quot;&gt;${extpack}&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; -O - &lt;span class=&quot;token variable&quot;&gt;${shasums_url}&lt;/span&gt;/SHA256SUMS &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;${extpack}&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; sha256sum -c
+VBoxManage extpack &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; --replace &lt;span class=&quot;token variable&quot;&gt;${extpack}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Enjoy! ;)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Reloading a Shiny application on source changes]]></title><description><![CDATA[I have been trying to implement watching for changes to source code and auto reloading a Shiny application. The problem being that Shiny…]]></description><link>https://pghalliday.com/reloading-a-shiny-application-on-source-changes/</link><guid isPermaLink="false">https://pghalliday.com/reloading-a-shiny-application-on-source-changes/</guid><pubDate>Tue, 17 Feb 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;I have been trying to implement watching for changes to source code and auto reloading a &lt;a href=&quot;http://shiny.rstudio.com/&quot;&gt;Shiny&lt;/a&gt; application. The problem being that Shiny applications only reload changes to &lt;code class=&quot;language-text&quot;&gt;server.R&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;ui.R&lt;/code&gt; by default, which isn’t so useful when your app gets complicated and you want to make it more modular.&lt;/p&gt;
+&lt;h2&gt;Option 1 - Shell goodness :)&lt;/h2&gt;
+&lt;p&gt;Initially I wanted to add minimal new stuff to my tool chain so I was looking for something that I could do in a shell script. My initial solution was &lt;code class=&quot;language-text&quot;&gt;inotify-tools&lt;/code&gt;. Simple to install:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; inotify-tools&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And once I got my head around some shell scripts malarkey, simple to configure by creating a &lt;code class=&quot;language-text&quot;&gt;watch.sh&lt;/code&gt; script:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;WATCHED_DIR&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;${1-.&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;app}&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;PORT&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;${2-5000}&lt;/span&gt;
+
+&lt;span class=&quot;token function-name function&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  R -e &lt;span class=&quot;token string&quot;&gt;&quot;shiny::runApp(&apos;&lt;span class=&quot;token variable&quot;&gt;$WATCHED_DIR&lt;/span&gt;&apos;, port = &lt;span class=&quot;token variable&quot;&gt;$PORT&lt;/span&gt;)&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;
+  &lt;span class=&quot;token assign-left variable&quot;&gt;PID&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$!&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+start
+
+inotifywait -mr &lt;span class=&quot;token variable&quot;&gt;$WATCHED_DIR&lt;/span&gt; --format &lt;span class=&quot;token string&quot;&gt;&apos;%e %f&apos;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  -e modify -e delete -e move -e create &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;read&lt;/span&gt; event &lt;span class=&quot;token function&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+
+  &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$event&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$file&lt;/span&gt;
+
+  &lt;span class=&quot;token function&quot;&gt;kill&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$PID&lt;/span&gt;
+  start
+
+&lt;span class=&quot;token keyword&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;By default this watches &lt;code class=&quot;language-text&quot;&gt;./app&lt;/code&gt; directory and restarts the Shiny application on port &lt;code class=&quot;language-text&quot;&gt;5000&lt;/code&gt; whenever a file or directory change is detected (modified, deleted, moved or created). You can also override the path and port on the command line, eg:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;./watch.sh ./src &lt;span class=&quot;token number&quot;&gt;5001&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Awesome :) and I’m so pleased with it that I just had to record it here for posterity. The fact is though that I don’t use it anymore (I used it for about 5 minutes). The reason being that next I wanted to integrate &lt;a href=&quot;http://livereload.com&quot;&gt;LiveReload&lt;/a&gt; to also refresh my browser window on updates.&lt;/p&gt;
+&lt;h2&gt;Option 2 - Ruby magic!&lt;/h2&gt;
+&lt;p&gt;The simplest way for me to run a LiveReload server was with the &lt;code class=&quot;language-text&quot;&gt;guard-livereload&lt;/code&gt; ruby gem. This means installing &lt;code class=&quot;language-text&quot;&gt;guard&lt;/code&gt; and running that. So let’s face it, if I’m going to run guard anyway, there’s not much point reloading the application with &lt;code class=&quot;language-text&quot;&gt;inotifywait&lt;/code&gt; when I could also use &lt;code class=&quot;language-text&quot;&gt;guard-process&lt;/code&gt;. So I made sure I had ruby and bundler installed:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; ruby
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; ruby-dev
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; gem &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; bundler&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Created the following &lt;code class=&quot;language-text&quot;&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ruby&quot;&gt;&lt;pre class=&quot;language-ruby&quot;&gt;&lt;code class=&quot;language-ruby&quot;&gt;source &lt;span class=&quot;token string&quot;&gt;&quot;https://rubygems.org&quot;&lt;/span&gt;
+
+gem &lt;span class=&quot;token string&quot;&gt;&apos;guard&apos;&lt;/span&gt;
+gem &lt;span class=&quot;token string&quot;&gt;&apos;guard-livereload&apos;&lt;/span&gt;
+gem &lt;span class=&quot;token string&quot;&gt;&apos;guard-process&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And installed dependencies:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;bundle &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Created the following &lt;code class=&quot;language-text&quot;&gt;Guardfile&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ruby&quot;&gt;&lt;pre class=&quot;language-ruby&quot;&gt;&lt;code class=&quot;language-ruby&quot;&gt;dir &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;app&apos;&lt;/span&gt;
+port &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5000&lt;/span&gt;
+
+guard &lt;span class=&quot;token string&quot;&gt;&apos;process&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shiny&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; command&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;R&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;-e&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;shiny::runApp(&apos;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token delimiter tag&quot;&gt;#{&lt;/span&gt;dir&lt;span class=&quot;token delimiter tag&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&apos;, port = &lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token delimiter tag&quot;&gt;#{&lt;/span&gt;port&lt;span class=&quot;token delimiter tag&quot;&gt;}&lt;/span&gt;&lt;/span&gt;)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  watch&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token regex&quot;&gt;%r{&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token delimiter tag&quot;&gt;#{&lt;/span&gt;dir&lt;span class=&quot;token delimiter tag&quot;&gt;}&lt;/span&gt;&lt;/span&gt;/.+\.R$}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+
+guard &lt;span class=&quot;token string&quot;&gt;&apos;livereload&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; grace_period&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0.5&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  watch&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token regex&quot;&gt;%r{&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token delimiter tag&quot;&gt;#{&lt;/span&gt;dir&lt;span class=&quot;token delimiter tag&quot;&gt;}&lt;/span&gt;&lt;/span&gt;/.+\.R$}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Note the order of the guards to ensure the restart happens before browsers are notified and the configured &lt;code class=&quot;language-text&quot;&gt;grace_period&lt;/code&gt; for LiveReload to ensure that the application has finished starting.&lt;/p&gt;
+&lt;p&gt;Now running:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;bundle &lt;span class=&quot;token builtin class-name&quot;&gt;exec&lt;/span&gt; guard&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Launches my application on port 5000&lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Well uncritical so misled&lt;/p&gt;
+&lt;p&gt;Watches for changes then&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;this is very interesting&lt;/li&gt;
+&lt;li&gt;reloads the application&lt;/li&gt;
+&lt;li&gt;reloads connected browsers running the LiveReload plugin&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Goodness much until that fluid owl&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Some useful Jenkins Groovy scripts]]></title><description><![CDATA[Recently I needed to automate the deployment and configuration of a Jenkins server. My configuration management tool of choice is Chef and…]]></description><link>https://pghalliday.com/some-useful-jenkins-groovy-scripts/</link><guid isPermaLink="false">https://pghalliday.com/some-useful-jenkins-groovy-scripts/</guid><pubDate>Sun, 21 Sep 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Recently I needed to automate the deployment and configuration of a &lt;a href=&quot;http://jenkins-ci.org/&quot;&gt;Jenkins&lt;/a&gt; server. My configuration management tool of choice is &lt;a href=&quot;https://www.getchef.com/&quot;&gt;Chef&lt;/a&gt; and my starting point is the &lt;a href=&quot;https://github.com/opscode-cookbooks/jenkins&quot;&gt;Opscode Jenkins cookbook&lt;/a&gt;. At this time the Jenkins cookbook only provides resources for basic Jenkins configuration, eg. &lt;code class=&quot;language-text&quot;&gt;jenkins_user&lt;/code&gt;, however it also exposes the &lt;code class=&quot;language-text&quot;&gt;jenkins_script&lt;/code&gt; resource for running arbitrary &lt;a href=&quot;http://groovy.codehaus.org/&quot;&gt;Groovy&lt;/a&gt; scripts on the server.&lt;/p&gt;
+&lt;p&gt;Using Groovy it’s possible to configure pretty much every part of a Jenkins server and even its plugins. However, finding documentation on how is not so trivial - the best place to start is the &lt;a href=&quot;http://javadoc.jenkins-ci.org/&quot;&gt;Jenkins Javadocs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;All of the following scripts were run with the &lt;code class=&quot;language-text&quot;&gt;jenkins_script&lt;/code&gt; resource as follows&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ruby&quot;&gt;&lt;pre class=&quot;language-ruby&quot;&gt;&lt;code class=&quot;language-ruby&quot;&gt;jenkins_script &lt;span class=&quot;token string&quot;&gt;&apos;resource name&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  command &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;EOH&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;gsub&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token regex&quot;&gt;/^ {4}/&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;Groovy&lt;/span&gt; &lt;span class=&quot;token constant&quot;&gt;Script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;token constant&quot;&gt;EOH&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It should also be noted that although it might be possible to write idempotent Groovy scripts the following are not exactly idempotent (although they can mostly be run as many times as you like without messing up the configuration)&lt;/p&gt;
+&lt;h2&gt;Setting permissions&lt;/h2&gt;
+&lt;p&gt;The first thing I needed to do was configure user permisssions so that only a user called &lt;code class=&quot;language-text&quot;&gt;admin&lt;/code&gt; could access anything. Note that the following script assumes that an &lt;code class=&quot;language-text&quot;&gt;admin&lt;/code&gt; user has been added already. Also in the context of a Chef run, immediately after running this, Chef will no longer be able to run scripts on the server unless it uses a private key that has been associated with the &lt;code class=&quot;language-text&quot;&gt;admin&lt;/code&gt; user (the solution to this problem is given in the &lt;a href=&quot;#appendix&quot;&gt;appendix&lt;/a&gt;).&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; hudson&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;security&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; instance &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; hudsonRealm &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;HudsonPrivateSecurityRealm&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setSecurityRealm&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hudsonRealm&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; strategy &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;GlobalMatrixAuthorizationStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+strategy&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;ADMINISTER&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string gstring&quot;&gt;&quot;admin&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setAuthorizationStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;strategy&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Set the slave agent port&lt;/h2&gt;
+&lt;p&gt;By default the jenkins slave agent port is randomized. However in my case I needed to configure my cluster using a firewall on the Jenkins master and thus wanted to open a single port to use for build slaves to communicate with the master using JNLP.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; instance &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setSlaveAgentPort&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;the fixed port number&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Set the administrator email address&lt;/h2&gt;
+&lt;p&gt;This is the &lt;code class=&quot;language-text&quot;&gt;System Admin e-mail address&lt;/code&gt; set in the Jenkins configuration&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; jenkinsLocationConfiguration &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; JenkinsLocationConfiguration&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+jenkinsLocationConfiguration&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setAdminAddress&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[your admin name] &amp;lt;[your admin email address]&gt;&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+jenkinsLocationConfiguration&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Set the mail server configuration&lt;/h2&gt;
+&lt;p&gt;I need the Jenkins server to mail notifications so I need to configure an SMTP server for it to use&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; inst &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; desc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; inst&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDescriptor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;hudson.tasks.Mailer&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setSmtpAuth&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[SMTP user]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string gstring&quot;&gt;&quot;[SMTP password]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setReplyToAddress&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[reply to email address]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setSmtpHost&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[SMTP host]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setUseSsl&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt; or &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt; to use SLL&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setSmtpPort&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[SMTP port]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setCharset&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[character set]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Set the Git plugin configuration&lt;/h2&gt;
+&lt;p&gt;The git client used by Jenkins should have a user name and email set&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; inst &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; desc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; inst&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDescriptor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;hudson.plugins.git.GitSCM&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setGlobalConfigName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[name to use with git commits]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setGlobalConfigEmail&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[email to use with git commits]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Sonar plugin configuration&lt;/h2&gt;
+&lt;p&gt;We use Sonar to run static analysis on code and record code coverage, etc. As such I needed to configure both a Sonar installation and a default Sonar runner for Jenkins to use. Javadocs for the Sonar plugin were not so easy to track down and when I did they were not so accurate so some of this was arrived at through trial and error. The best reference however, is the &lt;a href=&quot;https://github.com/SonarSource/jenkins-sonar-plugin&quot;&gt;Sonar plugin source&lt;/a&gt; itself.&lt;/p&gt;
+&lt;h3&gt;Add the Sonar installation&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; hudson&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;plugins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;sonar&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; hudson&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;plugins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;sonar&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; inst &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; desc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; inst&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDescriptor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;hudson.plugins.sonar.SonarPublisher&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; sinst &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SonarInstallation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[name of the sonar installation - I use the host name]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt; or &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt; to disable the sonar installation&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar server url]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar database url]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar database driver]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar database user]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar database password]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[version of sonar maven plugin - I don&apos;t use maven so leave this blank]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[additional properties to pass to maven - again I leave this blank]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TriggersConfig&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar user]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar password]&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setInstallations&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;sinst&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Add the Sonar runner&lt;/h3&gt;
+&lt;p&gt;This adds a runner that will be installed automatically from Maven central&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; hudson&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;plugins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;sonar&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; hudson&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;tools&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; inst &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; desc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; inst&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDescriptor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;hudson.plugins.sonar.SonarRunnerInstallation&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; installer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SonarRunnerInstaller&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[sonar runner version]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; prop &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;InstallSourceProperty&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;installer&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; sinst &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SonarRunnerInstallation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string gstring&quot;&gt;&quot;[name of the sonar runner - I called it Default]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string gstring&quot;&gt;&quot;[home? - not sure how this is used and I left it blank]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;prop&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setInstallations&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;sinst&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+desc&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Set the number of executors&lt;/h2&gt;
+&lt;p&gt;As I was building a Jenkins cluster I wanted all my builds to run on slaves and as such the master should have 0 executors. This was the only problem script as it requires a Jenkins restart to apply. I didn’t want Jenkins to restart everytime the chef client ran (there’s that idempotence problem) so had to wrap this with a flag to ensure it only ran on the first Chef run.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;groovy&quot;&gt;&lt;pre class=&quot;language-groovy&quot;&gt;&lt;code class=&quot;language-groovy&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; instance &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Jenkins&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setNumExecutors&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+instance&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;and wrapped as follows&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ruby&quot;&gt;&lt;pre class=&quot;language-ruby&quot;&gt;&lt;code class=&quot;language-ruby&quot;&gt;jenkins_script &lt;span class=&quot;token string&quot;&gt;&apos;master should have 0 executors&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  command &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;EOH&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;gsub&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token regex&quot;&gt;/^ {4}/&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    import jenkins&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token method-definition&quot;&gt;&lt;span class=&quot;token function&quot;&gt;instance&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token constant&quot;&gt;Jenkins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getInstance&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    instance&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;setNumExecutors&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    instance&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token constant&quot;&gt;EOH&lt;/span&gt;
+  notifies &lt;span class=&quot;token symbol&quot;&gt;:create&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;ruby_block[set the executors_set flag]&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token symbol&quot;&gt;:immediately&lt;/span&gt;
+  notifies &lt;span class=&quot;token symbol&quot;&gt;:restart&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;service[jenkins]&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token symbol&quot;&gt;:delayed&lt;/span&gt;
+  not_if &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;attribute&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;executors_set&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+
+ruby_block &lt;span class=&quot;token string&quot;&gt;&apos;set the executors_set flag&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  block &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+    node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;set&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;executors_set&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;true&lt;/span&gt;
+    node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save
+  &lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+  action &lt;span class=&quot;token symbol&quot;&gt;:nothing&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Appendix&lt;/h2&gt;
+&lt;p&gt;Here’s how to add a Jenkins user with Chef and the Jenkins cookbook such that once the user and key has been added, Chef then uses that key for future communication with the server.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ruby&quot;&gt;&lt;pre class=&quot;language-ruby&quot;&gt;&lt;code class=&quot;language-ruby&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# If security was enabled in a previous chef run then set the private key in the run_state&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# now as required by the Jenkins cookbook&lt;/span&gt;
+ruby_block &lt;span class=&quot;token string&quot;&gt;&apos;set jenkins private key&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  block &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+    node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run_state&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token symbol&quot;&gt;:jenkins_private_key&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;[your private key]&apos;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+  only_if &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;attribute&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;security_enabled&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Add the admin user only if it has not been added already then notify the resource&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# to configure the permissions for the admin user&lt;/span&gt;
+jenkins_user &lt;span class=&quot;token string&quot;&gt;&apos;admin&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  password &lt;span class=&quot;token string&quot;&gt;&apos;[your admin password]&apos;&lt;/span&gt;
+  public_keys &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;[your public key]&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+  not_if &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;attribute&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;security_enabled&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  notifies &lt;span class=&quot;token symbol&quot;&gt;:execute&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;jenkins_script[configure permissions]&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token symbol&quot;&gt;:immediately&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Configure the permissions so that login is required and the admin user is an administrator&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# after this point the private key will be required to execute jenkins scripts (including querying&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# if users exist) so we notify the `set the security_enabled flag` resource to set this up.&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# Also note that since Jenkins 1.556 the private key cannot be used until after the admin user&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# has been added to the security realm&lt;/span&gt;
+jenkins_script &lt;span class=&quot;token string&quot;&gt;&apos;configure permissions&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  command &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;EOH&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;gsub&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token regex&quot;&gt;/^ {4}/&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    import jenkins&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;model&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+    import hudson&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token method-definition&quot;&gt;&lt;span class=&quot;token function&quot;&gt;instance&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token constant&quot;&gt;Jenkins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getInstance&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token method-definition&quot;&gt;&lt;span class=&quot;token function&quot;&gt;hudsonRealm&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;HudsonPrivateSecurityRealm&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    instance&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;setSecurityRealm&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hudsonRealm&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token method-definition&quot;&gt;&lt;span class=&quot;token function&quot;&gt;strategy&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;GlobalMatrixAuthorizationStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    strategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;add&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;Jenkins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;ADMINISTER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;admin&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    instance&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;setAuthorizationStrategy&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;strategy&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    instance&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token constant&quot;&gt;EOH&lt;/span&gt;
+  notifies &lt;span class=&quot;token symbol&quot;&gt;:create&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;ruby_block[set the security_enabled flag]&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token symbol&quot;&gt;:immediately&lt;/span&gt;
+  action &lt;span class=&quot;token symbol&quot;&gt;:nothing&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Set the security enabled flag and set the run_state to use the configured private key&lt;/span&gt;
+ruby_block &lt;span class=&quot;token string&quot;&gt;&apos;set the security_enabled flag&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+  block &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+    node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run_state&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token symbol&quot;&gt;:jenkins_private_key&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;[your private key]&apos;&lt;/span&gt;
+    node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;set&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;security_enabled&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;true&lt;/span&gt;
+    node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save
+  &lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;
+  action &lt;span class=&quot;token symbol&quot;&gt;:nothing&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Auto build and deploy GitHub pages with Travis-CI]]></title><description><![CDATA[So you have an existing Jekyll GitHub pages project but you also have some preliminary build steps and/or tests that you need to run before…]]></description><link>https://pghalliday.com/auto-build-and-deploy-github-pages-with-travis-ci/</link><guid isPermaLink="false">https://pghalliday.com/auto-build-and-deploy-github-pages-with-travis-ci/</guid><pubDate>Fri, 19 Sep 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;So you have an existing &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; &lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub pages&lt;/a&gt; project but you also have some preliminary build steps and/or tests that you need to run before pushing to GitHub to deploy. Now you’re tired of running these steps manually and keeping the built artifacts in your repository. One answer (and the answer illustrated here) is to use &lt;a href=&quot;https://travis-ci.org/&quot;&gt;Travis-CI&lt;/a&gt; to automate the build and deploy steps and retire the automatic Jekyll build that GitHub would perform.&lt;/p&gt;
+&lt;p&gt;First checkout the GitHub pages project to a new &lt;code class=&quot;language-text&quot;&gt;deploy&lt;/code&gt; branch.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout -b deploy
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push -u origin deploy&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Enable &lt;a href=&quot;https://travis-ci.org/&quot;&gt;Travis-CI&lt;/a&gt; on your GitHub pages project.&lt;/p&gt;
+&lt;p&gt;Set &lt;code class=&quot;language-text&quot;&gt;deploy&lt;/code&gt; to be the default branch in the GitHub web interface. This will be the branch that you do most of your work in or make future branches from, so it makes sense for it to be the default. You will no longer manually make changes to the &lt;code class=&quot;language-text&quot;&gt;master&lt;/code&gt; branch.&lt;/p&gt;
+&lt;p&gt;Add the SSH key entries to &lt;code class=&quot;language-text&quot;&gt;.gitignore&lt;/code&gt; as illustrated here&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/pghalliday/240fe740d523dad21d3f.js?file=gitignore.sh&quot;&gt;&lt;/script&gt;
+&lt;p&gt;Generate a private/public key pair without passphrase in the repo directory&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;ssh-keygen -t rsa -C &lt;span class=&quot;token string&quot;&gt;&quot;deploy@travis-ci.org&quot;&lt;/span&gt; -f deploy_key -N &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Add the public key (&lt;code class=&quot;language-text&quot;&gt;deploy_key.pub&lt;/code&gt;) to the GitHub repository as a ‘Deploy Key’ through the web interface. We are using deploy keys so that we can make them specific to a single repository. An alternative approach could use ‘Personal access tokens’ but they would then allow access to all repositories associated with the given account - this might be preferable in an organization context, using special GitHub accounts created specifically for Travis-CI to work with multiple repositories. The use of ‘Personal access tokens’ (and my starting point for this approach) is illustrated in Evan Sosenko’s article, &lt;a href=&quot;http://evansosenko.com/posts/automatic-publishing-github-pages-travis-ci/&quot;&gt;“Automatic publishing to GitHub Pages with Travis CI”&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Install the travis gem&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;gem &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; travis&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Login to travis with your GitHub credentials&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;travis login&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Encrypt the SSH key to generate &lt;code class=&quot;language-text&quot;&gt;deploy_key.enc&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;travis encrypt-file deploy_key&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This will ouput a command that can be used to decrypt the file again during a Travis build. This command has already been added to &lt;code class=&quot;language-text&quot;&gt;deploy.sh&lt;/code&gt;, however you will need to make a note of the unique encryption label that Travis assigns as this will be added as an environment variable in &lt;code class=&quot;language-text&quot;&gt;.travis.yml&lt;/code&gt; later. The encryption label can be seen in the command in 2 different variables&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;encrypted_${ENCRYPTION_LABEL}_key&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;encrypted_${ENCRYPTION_LABEL}_iv&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;When she reached the first hills of the &lt;strong&gt;Italic Mountains&lt;/strong&gt;, she had a last
-view back on the skyline of her hometown &lt;em&gt;Bookmarksgrove&lt;/em&gt;, the headline of
-&lt;a href=&quot;http://google.com&quot;&gt;Alphabet Village&lt;/a&gt; and the subline of her own road, the Line
-Lane. Pityful a rhetoric question ran over her cheek, then she continued her
-way. On her way she met a copy.&lt;/p&gt;
-&lt;h3&gt;Overlaid the jeepers uselessly much excluding&lt;/h3&gt;
-&lt;p&gt;But nothing the copy said could convince her and so it didn’t take long until a
-few insidious Copy Writers ambushed her, made her drunk with
-&lt;a href=&quot;http://google.com&quot;&gt;Longe and Parole&lt;/a&gt; and dragged her into their agency, where
-they abused her for their projects again and again. And if she hasn’t been
-rewritten, then they are still using her.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-right at the coast of the Semantics, a large language ocean.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;It is a paradisematic country, in which roasted parts of sentences fly into your
-mouth. Even the all-powerful Pointing has no control about the blind texts it is
-an almost unorthographic life One day however a small line of blind text by the
-name of Lorem Ipsum decided to leave for the far World of Grammar.&lt;/p&gt;
-&lt;h3&gt;According a funnily until pre-set or arrogant well cheerful&lt;/h3&gt;
-&lt;p&gt;The Big Oxmox advised her not to do so, because there were thousands of bad
-Commas, wild Question Marks and devious Semikoli, but the Little Blind Text
-didn’t listen. She packed her seven versalia, put her initial into the belt and
-made herself on the way.&lt;/p&gt;
+&lt;p&gt;Add the &lt;code class=&quot;language-text&quot;&gt;deploy.sh&lt;/code&gt; file as given here and mark it executable&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/pghalliday/240fe740d523dad21d3f.js?file=auto-build-and-deploy-github-pages-with-travis-ci.sh&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;chmod&lt;/span&gt; +x deploy.sh&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Add a &lt;code class=&quot;language-text&quot;&gt;.travis.yml&lt;/code&gt; to the branch as given here&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/pghalliday/240fe740d523dad21d3f.js?file=deploy.travis.yml&quot;&gt;&lt;/script&gt;
+&lt;p&gt;Add a &lt;code class=&quot;language-text&quot;&gt;build&lt;/code&gt; task to your &lt;code class=&quot;language-text&quot;&gt;Rakefile&lt;/code&gt; that at least calls &lt;code class=&quot;language-text&quot;&gt;jekyll build&lt;/code&gt; but should also perform the additional build and test steps that you wanted Travis-CI to do in the first place.&lt;/p&gt;
+&lt;p&gt;Commit your changes to the &lt;code class=&quot;language-text&quot;&gt;deploy&lt;/code&gt; branch but don’t push them yet&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; -A &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;adding travis auto build and deploy support&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Switch back to the &lt;code class=&quot;language-text&quot;&gt;master&lt;/code&gt; branch that GitHub will use for the source of your GitHub pages site&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Delete all the existing files and create a &lt;code class=&quot;language-text&quot;&gt;.nojekyll&lt;/code&gt; file to let GitHub know that it does not need to run Jekyll again.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; .nojekyll&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Add a &lt;code class=&quot;language-text&quot;&gt;.travis.yml&lt;/code&gt; file to the &lt;code class=&quot;language-text&quot;&gt;master&lt;/code&gt; branch as given here to prevent Travis-CI building the master branch when it changes. After all there is nothing for Travis-CI to do in the master branch&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/pghalliday/240fe740d523dad21d3f.js?file=master.travis.yml&quot;&gt;&lt;/script&gt;
+&lt;p&gt;Commit the &lt;code class=&quot;language-text&quot;&gt;master&lt;/code&gt; branch and push both branches back to GitHub&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; -A &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;Prepare master branch as a deployment target&quot;&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push --all&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This will trigger Travis-CI to do its first deployment from the &lt;code class=&quot;language-text&quot;&gt;deploy&lt;/code&gt; branch.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Running a full Bitcoin node on AWS]]></title><description><![CDATA[UPDATE - 10th August 2014: The results are in The node stayed stable throughout July and the free tier benefits ran out before that so the…]]></description><link>https://pghalliday.com/running-a-full-bitcoin-node-on-aws/</link><guid isPermaLink="false">https://pghalliday.com/running-a-full-bitcoin-node-on-aws/</guid><pubDate>Fri, 02 May 2014 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;UPDATE - 10th August 2014: The results are in&lt;/h1&gt;
+&lt;p&gt;The node stayed stable throughout July and the free tier benefits ran out before that so the following is the complete cost.&lt;/p&gt;
+&lt;p&gt;Total incl. VAT @ 20%: &lt;strong&gt;$42.06&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The main contributions to this were (incl. VAT @ 20%):&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;Data Transfer&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;$0.120 per GB - up to 10 TB / month data transfer out&lt;/td&gt;
+&lt;td&gt;135.096 GB&lt;/td&gt;
+&lt;td&gt;$19.46&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;br&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;EC2&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;$0.020 per On Demand Linux t1.micro Instance Hour&lt;/td&gt;
+&lt;td&gt;744 Hrs&lt;/td&gt;
+&lt;td&gt;$17.86&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;$0.05 per 1 million I/O requests - US East (Northern Virginia)&lt;/td&gt;
+&lt;td&gt;23,715,799 IOs&lt;/td&gt;
+&lt;td&gt;$1.43&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;$0.05 per GB-month of Magnetic provisioned storage - US East (Northern Virginia)&lt;/td&gt;
+&lt;td&gt;48.000 GB-Mo&lt;/td&gt;
+&lt;td&gt;$2.88&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;p&gt;I just want to know how much it will cost to run a full bitcoin node on an EC2 instance. The two main factors being disk usage (the size of the block chain at the time of writing being around 17GB) and IO (how much traffic I may have to pay for to allow incoming connections on port 8333).&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;So baboon this&lt;/li&gt;
-&lt;li&gt;Mounted militant weasel gregariously admonishingly straightly hey&lt;/li&gt;
-&lt;li&gt;Dear foresaw hungry and much some overhung&lt;/li&gt;
-&lt;li&gt;Rash opossum less because less some amid besides yikes jeepers frenetic
-impassive fruitlessly shut&lt;/li&gt;
+&lt;li&gt;I start with a t1.micro instance running Ubuntu 14.04 (LTS) 64 bit.&lt;/li&gt;
+&lt;li&gt;For now I accept the default 8GB root volume and add an additional 40GB EBS volume on which I’ll store the blockchain (Originally I started with 20GB but this did not last long before running out of space and crashing the node - i’m sure less would suffice for a while but i don’t want to resize the disk again every few days/weeks)&lt;/li&gt;
+&lt;li&gt;I configure any IP access on port 22 for SSH (I have to be able to configure my server - although I could restrict the IP addresses allowed to connect on this port for added security)&lt;/li&gt;
+&lt;li&gt;I configure any IP access on port 8333 (I want this to be a useful node and not a leech! So other nodes have to be able to connect)&lt;/li&gt;
+&lt;li&gt;I create a new key pair to access the server using SSH and launch the instance!&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;When she reached the first hills of the Italic Mountains, she had a last view
-back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet
-Village and the subline of her own road, the Line Lane. Pityful a rhetoric
-question ran over her cheek, then she continued her way. On her way she met a
-copy.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The copy warned the Little Blind Text, that where it came from it would have
-been rewritten a thousand times and everything that was left from its origin
-would be the word “and” and the Little Blind Text should turn around and
-return to its own, safe country.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;But nothing the copy said could convince her and so it didn’t take long until a
-few insidious Copy Writers ambushed her, made her drunk with Longe and Parole
-and dragged her into their agency, where they abused her for their projects
-again and again. And if she hasn’t been rewritten, then they are still using
-her. Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts.&lt;/p&gt;
-&lt;h4&gt;Silent delightfully including because before one up barring chameleon&lt;/h4&gt;
-&lt;p&gt;Separated they live in Bookmarksgrove right at the coast of the Semantics, a
-large language ocean. A small river named Duden flows by their place and
-supplies it with the necessary regelialia. It is a paradisematic country, in
-which roasted parts of sentences fly into your mouth.&lt;/p&gt;
-&lt;p&gt;Even the all-powerful Pointing has no control about the blind texts it is an
-almost unorthographic life One day however a small line of blind text by the
-name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox
-advised her not to do so, because there were thousands of bad Commas, wild
-Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.&lt;/p&gt;
-&lt;h5&gt;Wherever far wow thus a squirrel raccoon jeez jaguar this from along&lt;/h5&gt;
-&lt;p&gt;She packed her seven versalia, put her initial into the belt and made herself on
-the way. When she reached the first hills of the Italic Mountains, she had a
-last view back on the skyline of her hometown Bookmarksgrove, the headline of
-Alphabet Village and the subline of her own road, the Line Lane. Pityful a
-rhetoric question ran over her cheek, then she continued her way. On her way she
-met a copy.&lt;/p&gt;
-&lt;h6&gt;Slapped cozy a that lightheartedly and far&lt;/h6&gt;
-&lt;p&gt;The copy warned the Little Blind Text, that where it came from it would have
-been rewritten a thousand times and everything that was left from its origin
-would be the word “and” and the Little Blind Text should turn around and return
-to its own, safe country. But nothing the copy said could convince her and so it
-didn’t take long until a few insidious Copy Writers ambushed her, made her drunk
-with Longe and Parole and dragged her into their agency, where they abused her
-for their projects again and again.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[My Second Post!]]></title><description><![CDATA[Wow! I love blogging so much already. Did you know that “despite its name, salted duck eggs can also be made from
-chicken eggs, though the…]]></description><link>https://pghalliday.com/my-second-post/</link><guid isPermaLink="false">https://pghalliday.com/my-second-post/</guid><pubDate>Wed, 06 May 2015 23:46:37 GMT</pubDate><content:encoded>&lt;p&gt;Wow! I love blogging so much already.&lt;/p&gt;
-&lt;p&gt;Did you know that “despite its name, salted duck eggs can also be made from
-chicken eggs, though the taste and texture will be somewhat different, and the
-egg yolk will be less rich.”?
-(&lt;a href=&quot;http://en.wikipedia.org/wiki/Salted_duck_egg&quot;&gt;Wikipedia Link&lt;/a&gt;)&lt;/p&gt;
-&lt;p&gt;Yeah, I didn’t either.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Hello World]]></title><description><![CDATA[This is my first post on my new fake blog! How exciting! I’m sure I’ll write a lot more interesting things in the future. Oh, and here’s a…]]></description><link>https://pghalliday.com/hello-world/</link><guid isPermaLink="false">https://pghalliday.com/hello-world/</guid><pubDate>Fri, 01 May 2015 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;This is my first post on my new fake blog! How exciting!&lt;/p&gt;
-&lt;p&gt;I’m sure I’ll write a lot more interesting things in the future.&lt;/p&gt;
-&lt;p&gt;Oh, and here’s a great quote from this Wikipedia on
-&lt;a href=&quot;http://en.wikipedia.org/wiki/Salted_duck_egg&quot;&gt;salted duck eggs&lt;/a&gt;.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A salted duck egg is a Chinese preserved food product made by soaking duck
-eggs in brine, or packing each egg in damp, salted charcoal. In Asian
-supermarkets, these eggs are sometimes sold covered in a thick layer of salted
-charcoal paste. The eggs may also be sold with the salted paste removed,
-wrapped in plastic, and vacuum packed. From the salt curing process, the
-salted duck eggs have a briny aroma, a gelatin-like egg white and a
-firm-textured, round yolk that is bright orange-red in color.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;span
-      class=&quot;gatsby-resp-image-wrapper&quot;
-      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
-    &gt;
-      &lt;a
-    class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/8058f3f26913fea3b6a89a73344fe94a/2b40c/salty_egg.jpg&quot;
-    style=&quot;display: block&quot;
-    target=&quot;_blank&quot;
-    rel=&quot;noopener&quot;
-  &gt;
-    &lt;span
-    class=&quot;gatsby-resp-image-background-image&quot;
-    style=&quot;padding-bottom: 75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAPABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAMB/8QAFwEAAwEAAAAAAAAAAAAAAAAAAAEEBf/aAAwDAQACEAMQAAABgik0dXC//8QAGRABAAMBAQAAAAAAAAAAAAAAAQACEhEy/9oACAEBAAEFAkqW2DlnRj73yf/EABcRAQADAAAAAAAAAAAAAAAAAAAREkH/2gAIAQMBAT8B1WX/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQL/2gAIAQIBAT8Bi6f/xAAbEAABBAMAAAAAAAAAAAAAAAAAAQIRISIxMv/aAAgBAQAGPwK9GNocyS8hCj//xAAbEAADAQADAQAAAAAAAAAAAAABESEAMUGBof/aAAgBAQABPyGxNMfrLHmCDZmAzzvJJDjEQCHv/9oADAMBAAIAAwAAABDIL//EABYRAQEBAAAAAAAAAAAAAAAAAAERAP/aAAgBAwEBPxARhylZv//EABgRAAIDAAAAAAAAAAAAAAAAAAABESFR/9oACAECAQE/EFoktI//xAAdEAEBAAICAwEAAAAAAAAAAAABEQAxIWFBcYHh/9oACAEBAAE/EEbMLQ0fMHDVaPIXyI4pk4JUnWacNCtO8ojDE9TGIYES7/Jn/9k=&apos;); background-size: cover; display: block;&quot;
-  &gt;&lt;/span&gt;
-  &lt;img
-        class=&quot;gatsby-resp-image-image&quot;
-        alt=&quot;Chinese Salty Egg&quot;
-        title=&quot;Chinese Salty Egg&quot;
-        src=&quot;/static/8058f3f26913fea3b6a89a73344fe94a/c739e/salty_egg.jpg&quot;
-        srcset=&quot;/static/8058f3f26913fea3b6a89a73344fe94a/8ee9c/salty_egg.jpg 148w,
-/static/8058f3f26913fea3b6a89a73344fe94a/ebbe7/salty_egg.jpg 295w,
-/static/8058f3f26913fea3b6a89a73344fe94a/c739e/salty_egg.jpg 590w,
-/static/8058f3f26913fea3b6a89a73344fe94a/5413e/salty_egg.jpg 885w,
-/static/8058f3f26913fea3b6a89a73344fe94a/4efde/salty_egg.jpg 1180w,
-/static/8058f3f26913fea3b6a89a73344fe94a/2b40c/salty_egg.jpg 2048w&quot;
-        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
-        loading=&quot;lazy&quot;
-      /&gt;
-  &lt;/a&gt;
-    &lt;/span&gt;&lt;/p&gt;</content:encoded></item></channel></rss>
+&lt;p&gt;Next I have to connect and install/configure bitcoind. To simplify things I’ll add a &lt;code class=&quot;language-text&quot;&gt;~/.ssh/config&lt;/code&gt; file to point to my new key and awkward public DNS name&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Host bitcoin-node
+    HostName ec2-XXX-XXX-XXX-XXX.compute-1.amazonaws.com
+    User ubuntu
+    IdentityFile ~/.ssh/bitcoin-node.pem&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This allows me to connect with a simple &lt;code class=&quot;language-text&quot;&gt;ssh bitcoin-node&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;So, now to install &lt;code class=&quot;language-text&quot;&gt;bitcoind&lt;/code&gt;…&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; add-apt-repository ppa:bitcoin/bitcoin
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; update
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; bitcoind&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And configure it as a service…&lt;/p&gt;
+&lt;p&gt;Before I start the &lt;code class=&quot;language-text&quot;&gt;bitcoind&lt;/code&gt; service I want to configure it to use my EBS volume for the blockchain. The first step of which is to initialize and mount the volume. Run the following command to get the device name&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# lsblk&lt;/span&gt;
+NAME  MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+xvdb  &lt;span class=&quot;token number&quot;&gt;202&lt;/span&gt;:16   &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;  40G  &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; disk 
+xvda1 &lt;span class=&quot;token number&quot;&gt;202&lt;/span&gt;:1    &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;   8G  &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; disk /&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As you can see, in my case I have an unitialized volume at &lt;code class=&quot;language-text&quot;&gt;/dev/xvdb&lt;/code&gt; (&lt;code class=&quot;language-text&quot;&gt;lsblk&lt;/code&gt; strips the &lt;code class=&quot;language-text&quot;&gt;/dev/&lt;/code&gt; from the device name). So I use the following command to initialize an &lt;code class=&quot;language-text&quot;&gt;ext4&lt;/code&gt; filesystem&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mkfs&lt;/span&gt; -t ext4 /dev/xvdb&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Next, I need to configure this to be mounted on boot. First I will create a mount point&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; /data&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then we can add the following line to &lt;code class=&quot;language-text&quot;&gt;/etc/fstab&lt;/code&gt; to mount the volume on boot in future&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;/dev/xvdb       /data   ext4    defaults        0       2&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Run the following to mount the volumes listed in &lt;code class=&quot;language-text&quot;&gt;/etc/fstab&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mount&lt;/span&gt; -a&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now add a &lt;code class=&quot;language-text&quot;&gt;bitcoin&lt;/code&gt; system user, setting its home directory on the EBS volume&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; adduser --system --group --shell /bin/bash --home /data/bitcoin bitcoin&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To configure &lt;code class=&quot;language-text&quot;&gt;bitcoind&lt;/code&gt; we now need to add a config file to &lt;code class=&quot;language-text&quot;&gt;/data/bitcoin/.bitcoin/bitcoin.conf&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;rpcuser=bitcoinrpc
+rpcpassword=DO_NOT_USE_THIS_PASSWORD_MAKE_UP_SOMETHING_RANDOM_YOU_DONT_HAVE_TO_REMEMBER_IT&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now set the permissions on it&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;chown&lt;/span&gt; bitcoin:bitcoin /data/bitcoin/.bitcoin/bitcoin.conf
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;chmod&lt;/span&gt; 0600 /data/bitcoin/.bitcoin/bitcoin.conf&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now we can add an upstart config at &lt;code class=&quot;language-text&quot;&gt;/etc/init/bitcoind.conf&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;description &amp;quot;bitcoind&amp;quot;
+
+start on filesystem
+stop on runlevel [!2345]
+oom never
+expect daemon
+respawn
+respawn limit 10 60 # 10 times in 60 seconds
+
+script
+user=bitcoin
+home=/data/bitcoin
+cmd=/usr/bin/bitcoind
+pidfile=$home/bitcoind.pid
+# Don&amp;#39;t change anything below here unless you know what you&amp;#39;re doing
+[[ -e $pidfile &amp;amp;&amp;amp; ! -d &amp;quot;/proc/$(cat $pidfile)&amp;quot; ]] &amp;amp;&amp;amp; rm $pidfile
+[[ -e $pidfile &amp;amp;&amp;amp; &amp;quot;$(cat /proc/$(cat $pidfile)/cmdline)&amp;quot; != $cmd* ]] &amp;amp;&amp;amp; rm $pidfile
+exec start-stop-daemon --start -c $user --chdir $home --pidfile $pidfile --startas $cmd -b --nicelevel 15 -m
+end script&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Before we can start the service we need to make sure that the machine does not run out of memory and crash it. This will happen after a fairly short time. The solution is to add a swapfile.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;dd&lt;/span&gt; &lt;span class=&quot;token assign-left variable&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/dev/zero &lt;span class=&quot;token assign-left variable&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/swapfile &lt;span class=&quot;token assign-left variable&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;1M &lt;span class=&quot;token assign-left variable&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1536&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mkswap&lt;/span&gt; /swapfile
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;swapon&lt;/span&gt; /swapfile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This creates a 1.5GB (a little over twice the RAM of 0.613GB on a t1.micro instance) swap file and activates it. In order to ensure it is activated on reboot we need to add another entry to &lt;code class=&quot;language-text&quot;&gt;/etc/fstab&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;/swapfile       none    swap    sw      0       0 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To ensure that the swapfile is only used when it’s really needed we should set the swappiness. This is an optimization of the kernel. A high value (maximum of 100) would tell the kernel to favour the swap file, we will set a low value of 10 to favour RAM when it is available.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;tee&lt;/span&gt; /proc/sys/vm/swappiness
+&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; vm.swappiness &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;tee&lt;/span&gt; -a /etc/sysctl.conf&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;These commands set the current swappiness value and set the kernel configuration to the same value on reboot. To finish configuring the swapfile, set its permissions so that it cannot be read by other users.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;chown&lt;/span&gt; root:root /swapfile 
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;chmod&lt;/span&gt; 0600 /swapfile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Only now should we register the service and start it…&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; initctl reload-configuration
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; start bitcoind&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And there we go, the bitcoin node should be running and downloading the blockchain. I have no intention of actually using it as a wallet but hopefully it will be providing the useful services of a participating full node. Now let’s see how the costs stack up.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[NodeJS - Getting test coverage from child processes]]></title><description><![CDATA[This is a problem that I keep running into. I like to use a combination of ,  and  to get coverage reports from my unit tests. The problem…]]></description><link>https://pghalliday.com/nodejs--getting-test-coverage-from-child-processes/</link><guid isPermaLink="false">https://pghalliday.com/nodejs--getting-test-coverage-from-child-processes/</guid><pubDate>Sun, 23 Feb 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a problem that I keep running into. I like to use a combination of &lt;code class=&quot;language-text&quot;&gt;Grunt&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Mocha&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;Blanket&lt;/code&gt; to get coverage reports from my unit tests. The problem is that this creates a global variable to collect the coverage data in the process in which the code under test runs. Normally this is the same process in which &lt;code class=&quot;language-text&quot;&gt;Grunt&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;Mocha&lt;/code&gt; are running, however I have a common class of tests in which this is not true.&lt;/p&gt;
+&lt;p&gt;When I want to perform an end to end integration test or test an entry point to a command line tool then usually I want to use &lt;code class=&quot;language-text&quot;&gt;child_process.exec&lt;/code&gt; or &lt;code class=&quot;language-text&quot;&gt;child_process.spawn&lt;/code&gt; to kick it off. This first became apparent when I wanted to test a plugin for &lt;code class=&quot;language-text&quot;&gt;Grunt&lt;/code&gt; itself, &lt;code class=&quot;language-text&quot;&gt;grunt-mocha-test&lt;/code&gt;. The workaround was to create a special script that could be launched in place of &lt;code class=&quot;language-text&quot;&gt;Grunt&lt;/code&gt; that would programatically call &lt;code class=&quot;language-text&quot;&gt;Grunt&lt;/code&gt;, collect the coverage data and then write it to a file. This script would then be launched by a wrapper to &lt;code class=&quot;language-text&quot;&gt;child_process.exec&lt;/code&gt; that would collect the coverage data after the exec had completed and merge it with the coverage data from the parent process.&lt;/p&gt;
+&lt;p&gt;This works well but is not very portable. The challenge then is to create a generic solution to the problem and here it is.&lt;/p&gt;
+&lt;p&gt;The newly published &lt;a href=&quot;https://www.npmjs.org/package/cover-child-process&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;cover-child-process&lt;/code&gt;&lt;/a&gt; module can merge coverage data from Blanket instrumented source files running in child processes with the coverage data collected in the parent process.&lt;/p&gt;
+&lt;p&gt;Support for source instrumented with other coverage tools should be easy to add in the future too. Yay :)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Submitting Mocha BDD test results to Sonar]]></title><description><![CDATA[I like to use Mocha with the BDD test UI to write my tests and in the office at least, use Sonar to collect test and coverage data as well…]]></description><link>https://pghalliday.com/submitting-mocha-bdd-test-results-to-sonar/</link><guid isPermaLink="false">https://pghalliday.com/submitting-mocha-bdd-test-results-to-sonar/</guid><pubDate>Tue, 11 Feb 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;I like to use &lt;a href=&quot;http://visionmedia.github.io/mocha/&quot;&gt;Mocha&lt;/a&gt; with the BDD test UI to write my tests and in the office at least, use &lt;a href=&quot;http://www.sonarqube.org/&quot;&gt;Sonar&lt;/a&gt; to collect test and coverage data as well as perform static analysis on source code. For Javascript projects this means using the &lt;a href=&quot;http://docs.codehaus.org/display/SONAR/JavaScript+Plugin&quot;&gt;Sonar javascript plugin&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A typical &lt;code class=&quot;language-text&quot;&gt;sonar-project.properties&lt;/code&gt; configuration file will look like this.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;properties&quot;&gt;&lt;pre class=&quot;language-properties&quot;&gt;&lt;code class=&quot;language-properties&quot;&gt;&lt;span class=&quot;token attr-name&quot;&gt;sonar.projectKey&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;app:my-app&lt;/span&gt;
+&lt;span class=&quot;token attr-name&quot;&gt;sonar.projectName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;My Application&lt;/span&gt;
+&lt;span class=&quot;token attr-name&quot;&gt;sonar.projectVersion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;1.0&lt;/span&gt;
+
+&lt;span class=&quot;token attr-name&quot;&gt;sonar.sources&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;lib/src&lt;/span&gt;
+&lt;span class=&quot;token attr-name&quot;&gt;sonar.language&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;js&lt;/span&gt;
+
+&lt;span class=&quot;token attr-name&quot;&gt;sonar.javascript.jstestdriver.reportsPath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;reports&lt;/span&gt;
+&lt;span class=&quot;token attr-name&quot;&gt;sonar.javascript.lcov.reportPath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;reports/lcov.info&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This tells Sonar that my test results will be in the &lt;code class=&quot;language-text&quot;&gt;reports&lt;/code&gt; directory and that coverage data will be located at &lt;code class=&quot;language-text&quot;&gt;reports/lcov.info&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The Sonar javascript plugin supports coverage data in the &lt;code class=&quot;language-text&quot;&gt;lcov&lt;/code&gt; format and test reports in the &lt;code class=&quot;language-text&quot;&gt;xunit&lt;/code&gt; format.&lt;/p&gt;
+&lt;p&gt;For my NodeJS projects I use my &lt;a href=&quot;https://github.com/pghalliday/grunt-mocha-test&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;grunt-mocha-test&lt;/code&gt;&lt;/a&gt; plugin to generate the reports. In this case we can use the &lt;a href=&quot;https://github.com/StevenLooman/mocha-lcov-reporter&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;mocha-lcov-reporter&lt;/code&gt;&lt;/a&gt; to generate the coverage report. However when using the standard &lt;code class=&quot;language-text&quot;&gt;xunit&lt;/code&gt; reporter to generate the test report 2 problems become apparent when the reports are submitted to Sonar.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sonar will reject reports that have a &lt;code class=&quot;language-text&quot;&gt;classname&lt;/code&gt; that mirrors a source file, eg. if you have a source file called &lt;code class=&quot;language-text&quot;&gt;MyClass.js&lt;/code&gt; then you cannot have a test with a &lt;code class=&quot;language-text&quot;&gt;classname&lt;/code&gt; of &lt;code class=&quot;language-text&quot;&gt;MyClass&lt;/code&gt; (the standard &lt;code class=&quot;language-text&quot;&gt;xunit&lt;/code&gt; reporter uses the contents of the &lt;code class=&quot;language-text&quot;&gt;Describe&lt;/code&gt; text as the classname, so for me this happens a lot!)&lt;/li&gt;
+&lt;li&gt;Sonar interprets the &lt;code class=&quot;language-text&quot;&gt;classname&lt;/code&gt; field as a filename resulting in hard to read test reports in the Sonar UI (this is probably also the cause of the first issue)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The solution for me was to create a new reporter for Mocha based on the &lt;code class=&quot;language-text&quot;&gt;xunit&lt;/code&gt; reporter.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/pghalliday/mocha-sonar-reporter&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;mocha-sonar-reporter&lt;/code&gt;&lt;/a&gt; will generate &lt;code class=&quot;language-text&quot;&gt;xunit&lt;/code&gt; output that uses the concatenation of the suite and test titles as the test &lt;code class=&quot;language-text&quot;&gt;name&lt;/code&gt; and set the &lt;code class=&quot;language-text&quot;&gt;classname&lt;/code&gt; to a configurable constant so that name collisions can be avoided. If no &lt;code class=&quot;language-text&quot;&gt;classname&lt;/code&gt; is configured it will default to &lt;code class=&quot;language-text&quot;&gt;Test&lt;/code&gt;.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[First Post!]]></title><description><![CDATA[New blogging platform - no more blogger :) Let’s try some code:]]></description><link>https://pghalliday.com/first-post/</link><guid isPermaLink="false">https://pghalliday.com/first-post/</guid><pubDate>Sun, 09 Feb 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;New blogging platform - no more blogger :)&lt;/p&gt;
+&lt;p&gt;Let’s try some code:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;coffeescript&quot;&gt;&lt;pre class=&quot;language-coffeescript&quot;&gt;&lt;code class=&quot;language-coffeescript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Act&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;token property&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+    console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;log &lt;span class=&quot;token string&quot;&gt;&apos;Hi!&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item></channel></rss>
