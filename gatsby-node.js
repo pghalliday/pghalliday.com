@@ -8,8 +8,9 @@ exports.createPages = async ({ graphql, actions }) => {
   const result = await graphql(
     `
       {
-        allMarkdownRemark(
+        blog: allMarkdownRemark(
           sort: { fields: [frontmatter___date], order: DESC }
+          filter: { fields: { sourceInstanceName: { eq: "blog" } } }
           limit: 1000
         ) {
           edges {
@@ -32,7 +33,7 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   // Create blog posts pages.
-  const posts = result.data.allMarkdownRemark.edges
+  const posts = result.data.blog.edges
 
   posts.forEach((post, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
@@ -54,11 +55,18 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
+    const parent = getNode(node.parent)
+    const sourceInstanceName = parent.sourceInstanceName
+    const relativePath = createFilePath({ node, getNode })
+    createNodeField({
+      name: `sourceInstanceName`,
+      node,
+      value: sourceInstanceName,
+    })
     createNodeField({
       name: `slug`,
       node,
-      value,
+      value: `${sourceInstanceName}${relativePath}`,
     })
   }
 }
