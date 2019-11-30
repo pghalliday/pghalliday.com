@@ -1,10 +1,11 @@
 module.exports = {
+  pathPrefix: '/portfolio',
   siteMetadata: {
-    title: `pghalliday.com`,
+    title: `Peter Halliday`,
     author: `Peter Halliday`,
     location: `Amsterdam`,
     description: `TODO: create a description`,
-    siteUrl: `https://pghalliday.com/`,
+    siteUrl: `https://pghalliday.com/portfolio`,
     social: {
       twitter: `pghalliday`,
       github: `pghalliday`,
