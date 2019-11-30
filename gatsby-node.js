@@ -1,16 +1,64 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const { forEach } = require(`lodash`)
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
-  const blogPost = path.resolve(`./src/templates/blog-post.js`)
   const result = await graphql(
     `
       {
-        blog: allMarkdownRemark(
+        blogPosts: allMarkdownRemark(
           sort: { fields: [frontmatter___date], order: DESC }
           filter: { fields: { sourceInstanceName: { eq: "blog" } } }
+          limit: 1000
+        ) {
+          edges {
+            node {
+              fields {
+                slug
+              }
+              frontmatter {
+                title
+              }
+            }
+          }
+        }
+        experienceEntries: allMarkdownRemark(
+          sort: { fields: [frontmatter___date], order: DESC }
+          filter: { fields: { sourceInstanceName: { eq: "experience" } } }
+          limit: 1000
+        ) {
+          edges {
+            node {
+              fields {
+                slug
+              }
+              frontmatter {
+                title
+              }
+            }
+          }
+        }
+        portfolioItems: allMarkdownRemark(
+          sort: { fields: [frontmatter___date], order: DESC }
+          filter: { fields: { sourceInstanceName: { eq: "portfolio" } } }
+          limit: 1000
+        ) {
+          edges {
+            node {
+              fields {
+                slug
+              }
+              frontmatter {
+                title
+              }
+            }
+          }
+        }
+        services: allMarkdownRemark(
+          sort: { fields: [frontmatter___date], order: DESC }
+          filter: { fields: { sourceInstanceName: { eq: "services" } } }
           limit: 1000
         ) {
           edges {
@@ -32,21 +80,36 @@ exports.createPages = async ({ graphql, actions }) => {
     throw result.errors
   }
 
-  // Create blog posts pages.
-  const posts = result.data.blog.edges
+  const sections = {
+    blogPosts: {
+      template: path.resolve(`./src/templates/blog-post.js`),
+    },
+    experienceEntries: {
+      template: path.resolve(`./src/templates/experience-entry.js`),
+    },
+    portfolioItems: {
+      template: path.resolve(`./src/templates/portfolio-item.js`),
+    },
+    services: {
+      template: path.resolve(`./src/templates/service.js`),
+    },
+  }
 
-  posts.forEach((post, index) => {
-    const previous = index === posts.length - 1 ? null : posts[index + 1].node
-    const next = index === 0 ? null : posts[index - 1].node
+  forEach(sections, (params, name) => {
+    const pages = result.data[name].edges
+    pages.forEach((page, index) => {
+      const previous = index === pages.length - 1 ? null : pages[index + 1].node
+      const next = index === 0 ? null : pages[index - 1].node
 
-    createPage({
-      path: post.node.fields.slug,
-      component: blogPost,
-      context: {
-        slug: post.node.fields.slug,
-        previous,
-        next,
-      },
+      createPage({
+        path: page.node.fields.slug,
+        component: params.template,
+        context: {
+          slug: page.node.fields.slug,
+          previous,
+          next,
+        },
+      })
     })
   })
 }
@@ -66,7 +129,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     createNodeField({
       name: `slug`,
       node,
-      value: `${sourceInstanceName}${relativePath}`,
+      value: `/${sourceInstanceName}${relativePath}`,
     })
   }
 }
