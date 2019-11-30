@@ -78,5 +78,11 @@ module.exports = {
       },
     },
     `gatsby-plugin-emotion`,
+    {
+      resolve: `gatsby-plugin-disqus`,
+      options: {
+        shortname: `pghalliday`,
+      },
+    },
   ],
 }
