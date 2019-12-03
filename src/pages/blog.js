@@ -5,17 +5,16 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 
-class ServicesIndex extends React.Component {
+class BlogIndex extends React.Component {
   render() {
     const { data } = this.props
     const siteTitle = data.site.siteMetadata.title
-    const siteSubtitle = data.site.siteMetadata.subtitle
-    const services = data.services.edges
+    const posts = data.posts.edges
 
     return (
-      <Layout location={this.props.location} title={siteTitle} subtitle={siteSubtitle}>
-        <SEO title="All services" />
-        {services.map(({ node }) => {
+      <Layout location={this.props.location} title={siteTitle}>
+        <SEO title="All posts" />
+        {posts.map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
           return (
             <article key={node.fields.slug}>
@@ -29,6 +28,7 @@ class ServicesIndex extends React.Component {
                     {title}
                   </Link>
                 </h3>
+                <small>{node.frontmatter.date}</small>
               </header>
               <section>
                 <p
@@ -45,19 +45,18 @@ class ServicesIndex extends React.Component {
   }
 }
 
-export default ServicesIndex
+export default BlogIndex
 
 export const pageQuery = graphql`
   query {
     site {
       siteMetadata {
         title
-        subtitle
       }
     }
-    services: allMarkdownRemark(
-      sort: { fields: [frontmatter___sort], order: ASC }
-      filter: { fields: { sourceInstanceName: { eq: "services" } } }
+    posts: allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { fields: { sourceInstanceName: { eq: "blog" } } }
       limit: 1000
     ) {
       edges {
@@ -67,6 +66,7 @@ export const pageQuery = graphql`
             slug
           }
           frontmatter {
+            date(formatString: "MMMM DD, YYYY")
             title
             description
           }

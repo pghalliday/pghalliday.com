@@ -57,7 +57,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
         services: allMarkdownRemark(
-          sort: { fields: [frontmatter___date], order: DESC }
+          sort: { fields: [frontmatter___sort], order: ASC }
           filter: { fields: { sourceInstanceName: { eq: "services" } } }
           limit: 1000
         ) {

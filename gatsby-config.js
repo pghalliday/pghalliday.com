@@ -2,6 +2,7 @@ module.exports = {
   pathPrefix: '/portfolio',
   siteMetadata: {
     title: `Peter Halliday`,
+    subtitle: `Software Engineer`,
     author: `Peter Halliday`,
     location: `Amsterdam`,
     description: `TODO: create a description`,
