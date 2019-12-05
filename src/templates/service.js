@@ -1,23 +1,15 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import { Disqus } from 'gatsby-plugin-disqus'
 
-import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { rhythm, scale } from "../utils/typography"
+import { rhythm } from "../utils/typography"
 
 class ServiceTemplate extends React.Component {
   render() {
     const post = this.props.data.markdownRemark
     const siteTitle = this.props.data.site.siteMetadata.title
-    const siteUrl = this.props.data.site.siteMetadata.siteUrl
     const { previous, next } = this.props.pageContext
-    const disqusConfig = {
-      url: `${siteUrl+post.fields.slug}`,
-      identifier: post.frontmatter.disqus_identifier,
-      title: post.frontmatter.title,
-    }
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
@@ -30,20 +22,11 @@ class ServiceTemplate extends React.Component {
             <h1
               style={{
                 marginTop: rhythm(1),
-                marginBottom: 0,
+                marginBottom: rhythm(1),
               }}
             >
               {post.frontmatter.title}
             </h1>
-            <p
-              style={{
-                ...scale(-1 / 5),
-                display: `block`,
-                marginBottom: rhythm(1),
-              }}
-            >
-              {post.frontmatter.date}
-            </p>
           </header>
           <section dangerouslySetInnerHTML={{ __html: post.html }} />
           <hr
@@ -51,9 +34,6 @@ class ServiceTemplate extends React.Component {
               marginBottom: rhythm(1),
             }}
           />
-          <footer>
-            <Bio />
-          </footer>
         </article>
 
         <nav>
@@ -82,7 +62,6 @@ class ServiceTemplate extends React.Component {
             </li>
           </ul>
         </nav>
-        <Disqus config={disqusConfig} />
       </Layout>
     )
   }
@@ -95,7 +74,6 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
-        siteUrl
       }
     }
     markdownRemark(fields: { slug: { eq: $slug } }) {
@@ -103,9 +81,7 @@ export const pageQuery = graphql`
       excerpt(pruneLength: 160)
       html
       frontmatter {
-        disqus_identifier
         title
-        date(formatString: "MMMM DD, YYYY")
         description
       }
       fields {

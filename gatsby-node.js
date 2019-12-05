@@ -25,7 +25,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
         experienceEntries: allMarkdownRemark(
-          sort: { fields: [frontmatter___date], order: DESC }
+          sort: { fields: [fields___sortDate], order: DESC }
           filter: { fields: { sourceInstanceName: { eq: "experience" } } }
           limit: 1000
         ) {
@@ -57,7 +57,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
         services: allMarkdownRemark(
-          sort: { fields: [frontmatter___sort], order: ASC }
+          sort: { fields: [frontmatter___sort], order: DESC }
           filter: { fields: { sourceInstanceName: { eq: "services" } } }
           limit: 1000
         ) {
@@ -131,5 +131,19 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       node,
       value: `/${sourceInstanceName}${relativePath}`,
     })
+    if (sourceInstanceName === `experience`) {
+      // set the sort date to the end date or today
+      let sortDate
+      if (node.frontmatter[`end-date`]) {
+        sortDate = node.frontmatter[`end-date`]
+      } else {
+        sortDate = (new Date()).toISOString()
+      }
+      createNodeField({
+        name: `sortDate`,
+        node,
+        value: sortDate,
+      })
+    }
   }
 }

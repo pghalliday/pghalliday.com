@@ -1,8 +1,6 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import { Disqus } from 'gatsby-plugin-disqus'
 
-import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
@@ -11,13 +9,8 @@ class ExperienceEntryTemplate extends React.Component {
   render() {
     const post = this.props.data.markdownRemark
     const siteTitle = this.props.data.site.siteMetadata.title
-    const siteUrl = this.props.data.site.siteMetadata.siteUrl
     const { previous, next } = this.props.pageContext
-    const disqusConfig = {
-      url: `${siteUrl+post.fields.slug}`,
-      identifier: post.frontmatter.disqus_identifier,
-      title: post.frontmatter.title,
-    }
+    const endDate = post.frontmatter.end_date || `Present`
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
@@ -30,11 +23,19 @@ class ExperienceEntryTemplate extends React.Component {
             <h1
               style={{
                 marginTop: rhythm(1),
-                marginBottom: 0,
+                marginBottom: rhythm(1 / 2),
               }}
             >
               {post.frontmatter.title}
             </h1>
+            <h3
+              style={{
+                marginTop: 0,
+                marginBottom: rhythm(1 / 2),
+              }}
+            >
+              {post.frontmatter.company}
+            </h3>
             <p
               style={{
                 ...scale(-1 / 5),
@@ -42,7 +43,7 @@ class ExperienceEntryTemplate extends React.Component {
                 marginBottom: rhythm(1),
               }}
             >
-              {post.frontmatter.date}
+              {post.frontmatter.start_date} to {endDate}
             </p>
           </header>
           <section dangerouslySetInnerHTML={{ __html: post.html }} />
@@ -51,9 +52,6 @@ class ExperienceEntryTemplate extends React.Component {
               marginBottom: rhythm(1),
             }}
           />
-          <footer>
-            <Bio />
-          </footer>
         </article>
 
         <nav>
@@ -82,7 +80,6 @@ class ExperienceEntryTemplate extends React.Component {
             </li>
           </ul>
         </nav>
-        <Disqus config={disqusConfig} />
       </Layout>
     )
   }
@@ -103,9 +100,10 @@ export const pageQuery = graphql`
       excerpt(pruneLength: 160)
       html
       frontmatter {
-        disqus_identifier
         title
-        date(formatString: "MMMM DD, YYYY")
+        company
+        start_date(formatString: "MMMM, YYYY")
+        end_date(formatString: "MMMM, YYYY")
         description
       }
       fields {
